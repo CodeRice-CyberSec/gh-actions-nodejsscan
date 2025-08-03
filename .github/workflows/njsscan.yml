@@ -14,10 +14,15 @@ jobs:
       # only required for workflows in private repositories
       actions: read
       contents: read
-    steps:
+   steps:
     - uses: actions/checkout@v4
     - name: nodejsscan scan
       id: njsscan
       uses: ajinabraham/njsscan-action@master
       with:
-        args: '.'
+        args: '. --sarif --output results.sarif || true'
+    - name: Upload njsscan report
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        # Path to SARIF file relative to the root of the repository
+        sarif_file: results.sarif
